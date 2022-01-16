@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'account',
     'post',
     'theater',
+    'seat',
     'knox'
 ]
 
