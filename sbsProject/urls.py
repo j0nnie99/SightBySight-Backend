@@ -22,4 +22,5 @@ urlpatterns = [
 #    path("account/", include("account.urls")),
 #    path("account/auth", include("knox.urls")),
     path("reviews/", include("post.urls")),
+    path('theaters/', include("theater.urls"))
 ]
