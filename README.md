@@ -1,15 +1,15 @@
 # Sight By Sight - Backend
 > for 2021 Winter Madcamp Week03
+- [Frontend & General Information](https://github.com/MIN60/madcamp_week3)
 
 - Django / Django Rest Framework
 - DB: MySQL
-- [Frontend Information](https://github.com/MIN60/madcamp_week3)
 
 <hr/>
 
 ## DB Schema <br>
 
-![image](https://user-images.githubusercontent.com/54874529/149899746-0985a379-571a-4c92-a08f-5e6f826d4fc8.png)
+![image](https://user-images.githubusercontent.com/54874529/149904286-9c9de4fd-5885-4e8a-96a6-934ec0013b27.png)
 
 <hr/>
 
