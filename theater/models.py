@@ -6,6 +6,7 @@ class Theater(models.Model):
     name = models.CharField(max_length=100, null=False)
     location = models.CharField(max_length=250, null=True)
     contact = models.CharField(max_length=100, null=True)
+    info = models.CharField(max_length=250, null=True)
 
     def __str__(self):
         return self.name

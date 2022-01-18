@@ -1,22 +1,31 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view 
 from rest_framework.response import Response 
-from django.http.response import HttpResponse 
-from .models import Post 
+from django.http.response import HttpResponse
+from .models import Post
 from .serializers import PostSerializer
-
-
+from drf_writable_nested import WritableNestedModelSerializer
 
 # Create your views here.
 @api_view(['GET'])
-def get_api(request):
+def postList(request):
     posts = Post.objects.all()
     serailized_posts= PostSerializer(posts, many=True)
     return Response(serailized_posts.data) 
-    
-    
+
+
+@api_view(['GET'])    
+def viewMyPost(request):
+    myPost = list(Post.objects.filter(user_id=4))
+    serailized_posts= PostSerializer(myPost, many=True)
+    return Response(serailized_posts.data) 
+
+    #ex1 = store.orderlist_set.all().filter(order_time__range=(start_date, end_date))
+    #ex1 = list(store.orderlist_set.all().filter(order_time__range=(start_date, end_date)).values())
+
+
+
 #@api_view(['POST'])
 #def post_api(request):
 #    if request.method == 'GET':
@@ -36,3 +45,4 @@ class PostViewSet(viewsets.ModelViewSet):
    	# serializer.save() 재정의
     def perform_create(self, serializer):
         serializer.save()        
+
