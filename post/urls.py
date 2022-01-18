@@ -6,9 +6,9 @@ router = routers.DefaultRouter()
 router.register('posts', views.PostViewSet)
 
 urlpatterns = [ 
-    path('reviews/list/',views.postList),
+    path('list/',views.postList),
     #path('post/', views.post_api),
     path('', include(router.urls)),
-    path('reviews/mypage/', views.viewMyPost),
+    path('myPost/', views.viewMyPost),
     
 ]

@@ -1,55 +1,50 @@
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from .models import User
+#userAccount/views.py
+from django.shortcuts import render
 from .serializers import UserSerializer
+from .models import User, isLogin
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, action
+from rest_framework import generics, status
+from django.contrib.auth.hashers import check_password
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-
-@csrf_exempt
-def account_list(request):
-    if request.method == 'GET':
-        query_set = User.objects.all()
-        serializer = UserSerializer(query_set, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = UserSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+from rest_framework.views import APIView
+from rest_framework import exceptions
+from post.models import Post
 
 
-@csrf_exempt
-def account(request, pk):
 
-    obj = User.objects.get(pk=pk)
-
-    if request.method == 'GET':
-        serializer = UserSerializer(obj)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = UserSerializer(obj, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
-        obj.delete()
-        return HttpResponse(status=204)
+@api_view(['GET'])
+def getUsers(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
 
 
-@csrf_exempt
+class UserCreate(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+# 회원가입
+@api_view(['POST'])
+def signup(request):
+    serializer = UserSerializer(data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+        user = User.objects.filter(nickname = serializer.data["nickname"])
+        return Response(user[0].id)     
+    return Response(serializer.errors)
+
+# 로그인
+@api_view(['POST'])
 def login(request):
-    if request.method == 'POST':
-        data = JSONParser().parse(request)
-        search_user = data['username']
-        obj = User.objects.get(username=search_user)
-
-        if data['password'] == obj.password:
-            return HttpResponse(status=200)
-        else:
-            return HttpResponse(status=400)
+    user = User.objects.filter(userID = request.data["userID"])
+    #isLogin DB에 userID 저장
+    #isLogin.save(user)
+    print("Login Success!")
+    #
+    if len(user)==1:
+        if check_password(request.data['password'], user[0].password): 
+            return Response(user[0].id)     
+        return Response("wrong password")     
+    return Response("wrong userID")          

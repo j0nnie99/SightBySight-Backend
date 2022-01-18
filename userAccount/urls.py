@@ -1,7 +1,8 @@
+#userAccount/urls.py
 from django.urls import path, include
 from . import views
 from rest_framework import urls
-from .views import current_user, getUsers, signup, login
+from .views import getUsers, signup, login
 
 urlpatterns = [
     # path('signup', views.UserCreate.as_view()),
